@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>資料科學學生 - 洪偉峻</title>
+    <title>靜宜大學資科系-洪偉峻</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="assets/css/main.css" />
@@ -30,7 +30,7 @@
     <section id="intro" class="wrapper style1 fullscreen fade-up">
         <div class="inner">
             <h1>洪偉峻</h1>
-            <p>靜宜大學資料科學系學生，有資料分析、推薦系統開發的經驗<br />擅長 Python、Java 及 SQL</p>
+            <p>靜宜大學資科系二年級A班<br />有資料分析、推薦系統開發的經驗，擅長 Python、Java 及 SQL </p>
         </div>
     </section>
 
@@ -76,6 +76,7 @@
 
                     <!-- 第一段 -->
                     <h4>第一段：載入模組與設定瀏覽器</h4>
+					
                     <pre>
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -84,7 +85,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 import time
                     </pre>
-                    <p><strong>說明：</strong>這一段負責準備工作，先載入所需的 Python 模組：</p>
+                    <p><strong>說明：</strong>這段程式碼載入 Selenium、Pandas 等必要模組，提供瀏覽器控制、資料處理、等待時間等功能，是整個爬蟲運作的基礎，確保程式可以自動開啟瀏覽器、抓取網頁內容並將結果儲存</p>
                     <ul>
                         <li>selenium：用來模擬自動化操作瀏覽器。</li>
                         <li>webdriver_manager：自動安裝與配置 ChromeDriver。</li>
@@ -107,7 +108,7 @@ url = "https://www.spotrac.com/mlb/free-agents/_/year/2025"
 driver.get(url)
 time.sleep(5)
                     </pre>
-                    <p><strong>說明：</strong>這一段是啟動瀏覽器，並開啟目標網站。</p>
+                    <p><strong>說明：</strong>設定 Chrome 的執行參數來模擬真實瀏覽器，避免遭網站封鎖，接著利用 Selenium 啟動 Chrome 瀏覽器並進入目標網址，等待資料完成以供後續爬取</p>
                     <ul>
                         <li>透過 webdriver.Chrome 啟動瀏覽器並載入目標網址</li>
                         <li>time.sleep(5) 是為了讓瀏覽器有時間載入 JavaScript 渲染的表格資料，若太快抓會抓不到東西</li>
@@ -125,16 +126,14 @@ for row in rows:
         data = {
             "Player": cols[0].text.strip(),
             "Position": cols[1].text.strip(),
-            "Age": cols[2].text.strip(),
-            "Team": cols[3].text.strip(),
+            "YRS": cols[2].text.strip(),
+            "value": cols[3].text.strip(),
             "2025 AAV": cols[4].text.strip(),
-            "Free Agent Type": cols[5].text.strip(),
-            "2024 Salary": cols[6].text.strip(),
         }
         data_list.append(data)
         print(data)
                     </pre>
-                    <p><strong>說明：</strong>這一段是資料抓取的核心邏輯，從表格中解析出球員資料並儲存。</p>
+                    <p><strong>說明：</strong>這段程式從網頁的表格中擷取每列球員資料，依序讀取欄位內容，像是姓名、位置、薪資等，將其擷取並儲存到清單中，是整支爬蟲抓取關鍵資料的核心部分</p>
                     <ul>
                         <li>建立 data_list，用來儲存每筆球員資料</li>
                         <li>用 find_elements(By.CSS_SELECTOR, 'tbody tr') 找到所有資料列</li>
@@ -150,7 +149,7 @@ df = pd.DataFrame(data_list)
 df.to_csv("spotrac_mlb_free_agents_2025.csv", index=False, encoding="utf-8-sig")
 print("資料儲存：spotrac_mlb_free_agents_2025.csv")
                     </pre>
-                    <p><strong>說明：</strong>這一段將資料儲存為 CSV 檔案並關閉瀏覽器。</p>
+                    <p><strong>說明：</strong>將擷取到的資料轉換為 Pandas 的 DataFrame 格式，方便儲存與後續分析，再輸出為 CSV 檔案，同時關閉瀏覽器釋放資源，完成整體爬蟲流程並將結果儲存</p>
                     <ul>
                         <li>pd.DataFrame(data_list)：將剛剛的資料清單轉換成 Pandas 表格格式，方便儲存與分析</li>
                         <li>.to_csv(...)：把 DataFrame 寫入 CSV 檔案</li>
